@@ -3,7 +3,7 @@ import Database from './database';
 
 const database = new Database;
 
-var server = http.createServer(async function(req, res) {
+var server = http.createServer(async function (req, res) {
     var html = '\
     <html>\
     <head>\
