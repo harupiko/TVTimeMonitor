@@ -16,7 +16,7 @@ var server = http.createServer(async function (req, res) {
     </p>\
     <p style="text-align:center">\
     <font size=7>今日のテレビ視聴時間は</font><br>\
-    <div style="font-size:180;text-align:center">{{myvar}}分</div>\
+    <div style="font-size:180;text-align:center">{{hours}}時間{{minutes}}分</div>\
     </p>\
     </body>\
     </html>';
@@ -24,7 +24,9 @@ var server = http.createServer(async function (req, res) {
     await database.get().then((row) => {
         const { date, total } = row;
         console.log('date::::', date, total);
-        var newHtml = html.replace('\{\{myvar\}\}', total.toString()).replace('\{\{date\}\}', date);
+        const hours = Math.floor(total/60);
+        const minutes = total%60;
+        var newHtml = html.replace('\{\{hours\}\}', hours.toString()).replace('\{\{minutes\}\}', minutes.toString()).replace('\{\{date\}\}', date);
         res.writeHead(200);
         res.write(newHtml);
         res.end();
