@@ -1,9 +1,6 @@
 import sqlite3 from 'sqlite3';
 
-type RowData = {
-  date: string,
-  total: number,
-}
+const HOUR_END_OF_DAY = 4;
 
 export default class Database {
   database: any;
@@ -15,15 +12,28 @@ export default class Database {
       console.log('connected to the db');
     });
   }
-  async get(): Promise<RowData> {
+  async get(): Promise<number> {
+    const startOfDay = new Date();
+    const endOfDay = new Date();
+
+    if (startOfDay.getHours() < HOUR_END_OF_DAY) {
+      startOfDay.setHours(-24+HOUR_END_OF_DAY,0,0,0);
+      endOfDay.setHours(HOUR_END_OF_DAY,0,0,0);
+    } else {
+      startOfDay.setHours(HOUR_END_OF_DAY,0,0,0);
+      endOfDay.setHours(24+HOUR_END_OF_DAY,0,0,0);
+    }
+
     return new Promise((promise, reject) => {
-      this.database.get(`SELECT * FROM log ORDER BY date DESC limit 1`, (err, row) => {
+      this.database.all(`SELECT * FROM log WHERE datetime("${startOfDay.toISOString()}", "localtime") <= date AND date < datetime("${endOfDay.toISOString()}", "localtime") AND is_on = true ORDER BY date DESC`, (err, rows) => {
         if (err) {
           console.error(err.message);
           reject(err);
         }
-        console.log(row);
-        return promise(row);
+
+        const result = rows.length;
+
+        return promise(result);
       });
     });
   }

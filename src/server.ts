@@ -16,17 +16,17 @@ var server = http.createServer(async function (req, res) {
     </p>\
     <p style="text-align:center">\
     <font size=7>今日のテレビ視聴時間は</font><br>\
-    <div style="font-size:180;text-align:center">{{hours}}時間{{minutes}}分</div>\
+    <div style="font-size:180;text-align:center">{{hours}}時間<br>{{minutes}}分</div>\
     </p>\
     </body>\
     </html>';
 
-    await database.get().then((row) => {
-        const { date, total } = row;
-        console.log('date::::', date, total);
+    await database.get().then((total) => {
+        const date = new Date();
+        console.log('date::::', date.toString(), total);
         const hours = Math.floor(total/60);
         const minutes = total%60;
-        var newHtml = html.replace('\{\{hours\}\}', hours.toString()).replace('\{\{minutes\}\}', minutes.toString()).replace('\{\{date\}\}', date);
+        var newHtml = html.replace('\{\{hours\}\}', hours.toString()).replace('\{\{minutes\}\}', minutes.toString()).replace('\{\{date\}\}', date.toString());
         res.writeHead(200);
         res.write(newHtml);
         res.end();
