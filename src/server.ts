@@ -26,12 +26,15 @@ var server = http.createServer(async function (req, res) {
         console.log('date::::', date.toString(), total);
         const hours = Math.floor(total/60);
         const minutes = total%60;
-        var newHtml = html.replace('\{\{hours\}\}', hours.toString()).replace('\{\{minutes\}\}', minutes.toString()).replace('\{\{date\}\}', date.toString());
-        res.writeHead(200);
-        res.write(newHtml);
-        res.end();
-    });
+        html = html.replace('\{\{hours\}\}', hours.toString()).replace('\{\{minutes\}\}', minutes.toString()).replace('\{\{date\}\}', date.toString());
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 
+    res.writeHead(200);
+    res.write(html);
+    res.end();
 });
 
 server.listen(3000);
