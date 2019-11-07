@@ -1,6 +1,8 @@
 # TVTimeMonitor
 TV viewing time monitor.
 
+![viewer](docs/viewer.jpg)
+
 # Run Logger
 1. python current_logger.py
 
